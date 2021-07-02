@@ -1,0 +1,112 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    overflow: hidden;
+}
+.container{
+    /* animation: bgimg 15s linear infinite ; */
+    background-image: url(bg.png);
+    background-repeat: repeat-x;
+    background-size: 100vw 100vh;
+    height: 100vh;
+    width: 1000vw;
+}
+.score {
+    position: absolute;
+    top: 3vh;
+    left: 4vw;
+    height: 12vh;
+    width: 20vw;
+    font-size: 4vw;
+    font-family: sans-serif;
+}
+.over {
+    position: absolute;
+    top: 16vh;
+    left: 35vw;
+    height: 12vh;
+    width: 100%;
+    font-size: 6vw;
+    font-family: -webkit-pictograph;
+    color: red;
+}
+.runner{
+    background-image: url(runner.gif);
+    background-repeat: no-repeat;
+    background-size: 8vw 21vh;
+    position: absolute;
+    top: 67vh;
+    left: 15vw;
+    height: 21vh;
+    width: 8vw;    
+}
+.obstacle{
+    background-image: url(obstacle.png);
+    background-repeat: no-repeat;
+    background-size: 8vw 25vh;
+    position: absolute;
+    top: 70vh;
+    left: 45vw;
+    height: 25vh;
+    width: 8vw;    
+}
+.jump{
+    animation: go_up 1s linear 1 ;
+}
+.animate_obstacle{
+    animation: move_obstacle 3.3s linear infinite ;
+}
+.animate_obstacle_2{
+    animation: move_obstacle 1.8s linear infinite ;
+}
+.animate_over{
+    animation: over_animate 1s linear infinite ;
+}
+.bg2{
+    animation: bgimg2 8.5s linear infinite;
+}
+.bg{
+    animation: bgimg 15s linear infinite;
+}
+@keyframes go_up {
+    0%{
+        top: 67vh ;
+    }
+    50%{
+        top: 40vh;
+    }
+    100%{
+        top: 67vh;
+    }
+}
+@keyframes bgimg {
+    100%{
+        transform: translateX(-500vw);
+    }
+}
+@keyframes bgimg2 {
+    100%{
+        transform: translateX(-500vw);
+    }
+}
+@keyframes move_obstacle {
+    0%{
+        left: 100vw;
+    }
+    100%{
+        left: -10vw;
+    }
+}
+@keyframes over_animate {
+    0%{
+        color: red;
+    }
+    50%{
+       color: white;
+    }
+    100%{
+       color: red;
+    }
+}
