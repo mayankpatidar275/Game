@@ -6,16 +6,20 @@ let aud = null; // Declare audio element
 let musicStarted = false;
 
 const playButton = document.getElementById("playButton");
+
 playButton.addEventListener("click", () => {
   if (!musicStarted) {
     aud = new Audio("assets/audio/music.mp3"); // Initialize audio on first click
     aud.play();
     musicStarted = true;
+    playButton.textContent = "Sound 🔊"; // Update button text when sound starts
   } else {
     if (aud.paused) {
       aud.play(); // Play music if paused
+      playButton.textContent = "Sound 🔊"; // Update button text when sound resumes
     } else {
       aud.pause(); // Pause music if playing
+      playButton.textContent = "Sound 🔈"; // Update button text when sound is paused
     }
   }
 });
