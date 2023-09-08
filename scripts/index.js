@@ -25,7 +25,7 @@ playButton.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", function (e) {
-  if (e.keyCode === 38) {
+  if (e.keyCode === 38 || e.keyCode === 32) {
     const runner = document.querySelector(".runner");
     runner.classList.add("jump");
 
@@ -106,3 +106,4 @@ function updateScore(score) {
 
 // Start the game loop initially
 animationFrameId = requestAnimationFrame(gameLoop);
+
