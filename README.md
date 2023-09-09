@@ -1,6 +1,6 @@
 # Run and Jump Game
 
-![Game Screenshot](screenshot.png)
+![Game Screenshot](Screenshot.png)
 
 Play the game here: [Play Now](https://runner-game-mkpatidar.netlify.app/)
 
