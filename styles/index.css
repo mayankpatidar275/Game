@@ -40,6 +40,26 @@ body{
     font-family: -webkit-pictograph;
     color: red;
 }
+.level {
+    position: absolute;
+    top: 16vh;
+    left: 35vw;
+    opacity: 0; /* Initially, make the message invisible */
+    transition: opacity 0.5s ease-in-out; /* Add a transition effect */
+    height: 12vh;
+    width: 100%;
+    font-size: 6vw;
+    font-family: -webkit-pictograph;
+    color: green;
+}
+.credits {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: white;
+    opacity: 0.7;
+  }  
 .runner{
     background-image: url(../assets/images/runner.gif);
     background-repeat: no-repeat;
@@ -86,8 +106,7 @@ body{
     padding: 10px 20px;
     border-radius: 5px;
     opacity: 0.2; 
-    pointer-events: none; /* Make it non-interactive */
-    /* display: none; Initially hide the message */
+    pointer-events: none;
   }
   
   #playButton {
