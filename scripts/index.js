@@ -1,24 +1,62 @@
 let score = 0;
 let cross = true;
 let gameOverFlag = false;
-let aud = new Audio("assets/audio/music.mp3");
 let musicStarted = false;
+
+let trackMusic = new Audio("assets/audio/music.mp3");
+let jumpMusic = new Audio("assets/audio/jump.mp3");
+let gameOverMusic = new Audio("assets/audio/game_over.mp3");
+
+const over = document.querySelector(".over");
+const level = document.querySelector(".level");
 const playButton = document.getElementById("playButton");
 const instruction = document.querySelector(".instruction");
 const obstacle = document.querySelector(".obstacle");
 const container = document.querySelector(".container");
 const runner = document.querySelector(".runner");
+const startRestartButton = document.getElementById("startRestartButton");
 
-setTimeout(() => {
-  aud.play()
-}, 1000);
+// doesnt work in production: browser still need the first interaction to play.
+// setTimeout(() => {
+//   trackMusic.play()
+// }, 1000);
 
+// handling start and restart
+startRestartButton.addEventListener("click", () => {
+    if(gameOverFlag){
+      runner.style.backgroundImage = "url(../assets/images/runner.gif)";
+      obstacle.style.animationPlayState = "running";
+      container.style.animationPlayState = "running";
+      obstacle.classList.add("animate_obstacle");
+      container.classList.add("bg");
+      runner.style.left = "15vw";
+      obstacle.style.left = "0vw";
+      obstacle.style.animationDuration = 2.3 + 's';
+      container.style.animationDuration = 10.5 + 's';
+      over.style.visibility = "hidden";
+      startRestartButton.style.visibility = "hidden";
+      gameOverFlag = false;
+      instruction.textContent = "Arrow keys to play | Space to pause"
+      score = 0;
+      updateScore(score);
+      gameOverMusic.pause();
+      cross = true;
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+    else{
+      container.classList.add("bg");
+      obstacle.classList.add("animate_obstacle");
+      startRestartButton.style.visibility = "hidden";
+    }
+});
+
+// music play/pause functionality
 playButton.addEventListener("click", () => {
-    if (aud.paused) {
-      aud.play();
+    if (trackMusic.paused) {
+      trackMusic.play();
       playButton.textContent = "Sound 🔊";
     } else {
-      aud.pause();
+      trackMusic.pause();
       playButton.textContent = "Sound 🔈";
     }
 });
@@ -26,10 +64,7 @@ playButton.addEventListener("click", () => {
 document.addEventListener("keydown", function (e) {
   if (e.keyCode === 38) {
     runner.classList.add("jump");
-
-    const aud2 = new Audio("assets/audio/jump.mp3");
-    aud2.play();
-
+    jumpMusic.play();
     setTimeout(() => {
       runner.classList.remove("jump");
     }, 800);
@@ -65,38 +100,43 @@ function moveRunnerLeft() {
   const runner_x = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
   runner.style.left = runner_x - 22 + "px";
 }
-
+// console.log("in gameloop");
 let animationFrameId;
 
 function gameLoop() {
+  console.log("in gameloop");
   if (!gameOverFlag) {
-    const over = document.querySelector(".over");
-    const level = document.querySelector(".level");
 
     const rx = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
     const ry = parseInt(window.getComputedStyle(runner).getPropertyValue("top"));
 
     const ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
     const oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue("top"));
+    // console.log(ox);
 
     const x_dist = Math.abs(rx - ox);
     const y_dist = Math.abs(ry - oy);
-
+    console.log("in gameoverflag");
     if (y_dist < 55 && x_dist < 80) {
+
       obstacle.style.animationPlayState = "paused";
       container.style.animationPlayState = "paused";
+      obstacle.style.left = window.getComputedStyle(obstacle).getPropertyValue("left");
+      runner.style.left = window.getComputedStyle(runner).getPropertyValue("left");
+      obstacle.classList.remove("animate_obstacle");
+      container.classList.remove("bg");
+      
       runner.style.backgroundImage = "url(../assets/images/runner.png)";
       over.style.visibility = "visible";
+      startRestartButton.style.visibility = "visible";
       over.classList.add("animate_over");
-      instruction.textContent = "Reload to play again"
       gameOverFlag = true; 
-      if (aud) {
-        aud.pause(); 
+      if (trackMusic) {
+        trackMusic.pause(); 
         playButton.textContent = "Sound 🔈";
       }
+      gameOverMusic.play();
 
-      const aud3 = new Audio("assets/audio/game_over.mp3");
-      aud3.play();
     } else if (x_dist < 62 && cross) {
       score += 1;
       updateScore(score);
@@ -129,6 +169,7 @@ function gameLoop() {
 function updateScore(score) {
   const scoreCont = document.querySelector(".score");
   scoreCont.innerHTML = "Score: " + score;
+  // console.log(score);
 }
 
 // Start the game loop initially

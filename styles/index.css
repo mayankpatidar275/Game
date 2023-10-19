@@ -94,6 +94,26 @@ body{
     animation: bgimg 10.5s linear infinite;
 }
 
+.centered-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Add other styling properties as needed */
+    height: 25px;
+    width: 150px; 
+    padding: 10px 20px;
+    font-size: 20px;
+    font-family: sans-serif;
+    background-color: #008CBA; /* Background color for the score div */
+    color: white; /* Text color */
+    display: flex;
+    align-items: center; /* Center the text vertically */
+    justify-content: center; /* Center the text horizontally */
+    border-radius: 5px; /* Add some rounded corners */
+}
+
+
 #jumpInstruction {
     position: absolute;
     top: 30px;
