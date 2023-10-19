@@ -30,10 +30,10 @@ startRestartButton.addEventListener("click", () => {
       score = 0;
       updateScore(score);
       gameOverMusic.pause();
-      trackMusic.play();
-      playButton.textContent = "Sound 🔊";
       animationFrameId = requestAnimationFrame(gameLoop);
     }
+    trackMusic.play();
+    playButton.textContent = "Sound 🔊";
     startRestartButton.style.visibility = "hidden";
     startAnimation();
     obstacle.classList.add("animate_obstacle");
