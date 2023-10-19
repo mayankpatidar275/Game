@@ -1,7 +1,7 @@
 let score = 0;
 let cross = true;
 let gameOverFlag = false;
-let musicStarted = false;
+let gameStarted = false;
 
 let trackMusic = new Audio("assets/audio/music.mp3");
 let jumpMusic = new Audio("assets/audio/jump.mp3");
@@ -9,6 +9,7 @@ let gameOverMusic = new Audio("assets/audio/game_over.mp3");
 
 const over = document.querySelector(".over");
 const level = document.querySelector(".level");
+const scoreCont = document.querySelector(".score");
 const playButton = document.getElementById("playButton");
 const instruction = document.querySelector(".instruction");
 const obstacle = document.querySelector(".obstacle");
@@ -16,47 +17,50 @@ const container = document.querySelector(".container");
 const runner = document.querySelector(".runner");
 const startRestartButton = document.getElementById("startRestartButton");
 
-// doesnt work in production: browser still need the first interaction to play.
-// setTimeout(() => {
-//   trackMusic.play()
-// }, 1000);
-
 // handling start and restart
 startRestartButton.addEventListener("click", () => {
+    gameStarted = true;
     if(gameOverFlag){
-      runner.style.backgroundImage = "url(../assets/images/runner.gif)";
-      obstacle.style.animationPlayState = "running";
-      container.style.animationPlayState = "running";
-      obstacle.classList.add("animate_obstacle");
-      container.classList.add("bg");
       runner.style.left = "15vw";
-      obstacle.style.left = "0vw";
       obstacle.style.animationDuration = 2.3 + 's';
       container.style.animationDuration = 10.5 + 's';
       over.style.visibility = "hidden";
-      startRestartButton.style.visibility = "hidden";
       gameOverFlag = false;
-      instruction.textContent = "Arrow keys to play | Space to pause"
+      cross = true;
       score = 0;
       updateScore(score);
       gameOverMusic.pause();
-      cross = true;
+      trackMusic.play();
+      playButton.textContent = "Sound 🔊";
       animationFrameId = requestAnimationFrame(gameLoop);
     }
-    else{
-      container.classList.add("bg");
-      obstacle.classList.add("animate_obstacle");
-      startRestartButton.style.visibility = "hidden";
-    }
+    startRestartButton.style.visibility = "hidden";
+    startAnimation();
+    obstacle.classList.add("animate_obstacle");
+    container.classList.add("bg");
 });
 
 // music play/pause functionality
 playButton.addEventListener("click", () => {
     if (trackMusic.paused) {
-      trackMusic.play();
-      playButton.textContent = "Sound 🔊";
+      if(gameOverFlag){
+        if(gameOverMusic.paused){
+          gameOverMusic.play();
+          playButton.textContent = "Sound 🔊";
+        }
+        else{
+          gameOverMusic.pause();
+          playButton.textContent = "Sound 🔈";
+        }
+      }
+      else{
+        trackMusic.play();
+        playButton.textContent = "Sound 🔊";
+      }
+      
     } else {
       trackMusic.pause();
+      gameOverMusic.pause();
       playButton.textContent = "Sound 🔈";
     }
 });
@@ -80,31 +84,19 @@ document.addEventListener("keydown", function (e) {
     const obstacleAnimationState = obstacleComputedStyle.getPropertyValue("animation-play-state");
     
     if (obstacleAnimationState === "paused") {
-      obstacle.style.animationPlayState = "running";
-      container.style.animationPlayState = "running";
-      runner.style.backgroundImage = "url(../assets/images/runner.gif)";
+      startAnimation();
+      if(gameStarted) startRestartButton.style.visibility = "hidden";
     } else if (obstacleAnimationState === "running") {
-      obstacle.style.animationPlayState = "paused";
-      container.style.animationPlayState = "paused";
-      runner.style.backgroundImage = "url(../assets/images/runner.png)";
+      pauseAnimation();
+      startRestartButton.style.visibility = "visible";
     }
   }
 });
 
-function moveRunnerRight() {
-  const runner_x = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
-  runner.style.left = runner_x + 22 + "px";
-}
-
-function moveRunnerLeft() {
-  const runner_x = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
-  runner.style.left = runner_x - 22 + "px";
-}
-// console.log("in gameloop");
 let animationFrameId;
 
 function gameLoop() {
-  console.log("in gameloop");
+
   if (!gameOverFlag) {
 
     const rx = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
@@ -112,21 +104,17 @@ function gameLoop() {
 
     const ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
     const oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue("top"));
-    // console.log(ox);
 
     const x_dist = Math.abs(rx - ox);
     const y_dist = Math.abs(ry - oy);
-    console.log("in gameoverflag");
-    if (y_dist < 55 && x_dist < 80) {
 
-      obstacle.style.animationPlayState = "paused";
-      container.style.animationPlayState = "paused";
+    if (y_dist < 55 && x_dist < 80) {
+      pauseAnimation();
+      gameStarted = false;
       obstacle.style.left = window.getComputedStyle(obstacle).getPropertyValue("left");
       runner.style.left = window.getComputedStyle(runner).getPropertyValue("left");
       obstacle.classList.remove("animate_obstacle");
       container.classList.remove("bg");
-      
-      runner.style.backgroundImage = "url(../assets/images/runner.png)";
       over.style.visibility = "visible";
       startRestartButton.style.visibility = "visible";
       over.classList.add("animate_over");
@@ -166,13 +154,39 @@ function gameLoop() {
   }
 }
 
-function updateScore(score) {
-  const scoreCont = document.querySelector(".score");
-  scoreCont.innerHTML = "Score: " + score;
-  // console.log(score);
+function moveRunnerRight() {
+  const runner_x = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
+  if(runner_x<1400) runner.style.left = runner_x + 22 + "px";
 }
+
+function moveRunnerLeft() {
+  const runner_x = parseInt(window.getComputedStyle(runner).getPropertyValue("left"));
+  if(runner_x>10) runner.style.left = runner_x - 22 + "px";
+}
+
+function updateScore(score) {
+  scoreCont.innerHTML = "Score: " + score;
+}
+
+function pauseAnimation(){
+  obstacle.style.animationPlayState = "paused";
+  container.style.animationPlayState = "paused";
+  runner.style.backgroundImage = "url(../assets/images/runner.png)";
+}
+
+function startAnimation() {
+  obstacle.style.animationPlayState = "running";
+  container.style.animationPlayState = "running";
+  runner.style.backgroundImage = "url(../assets/images/runner.gif)";
+}
+
+animationFrameId = requestAnimationFrame(gameLoop);
 
 // Start the game loop initially
 // display's refresh rate (usually 60 times per second)
 // better than using setTimeout 
-animationFrameId = requestAnimationFrame(gameLoop);
+
+// doesnt work in production: browser still need the first interaction to play.
+// setTimeout(() => {
+//   trackMusic.play()
+// }, 1000);
