@@ -89,10 +89,12 @@ document.addEventListener("keydown", function (e) {
       if(gameStarted) startRestartButton.style.visibility = "hidden";
     } else if (obstacleAnimationState === "running") {
       pauseAnimation();
+      trackMusic.pause();
+      playButton.textContent = "Sound 🔈";
       startRestartButton.style.visibility = "visible";
     }
   }
-  e.preventDefault(); // Prevent the default behavior (e.g., scrolling)
+  // e.preventDefault(); // Prevent the default behavior (e.g., scrolling)
   e.stopPropagation(); // Prevent event bubbling
 });
 
