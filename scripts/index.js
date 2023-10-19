@@ -94,7 +94,7 @@ document.addEventListener("keydown", function (e) {
       startRestartButton.style.visibility = "visible";
     }
   }
-  // e.preventDefault(); // Prevent the default behavior (e.g., scrolling)
+  e.preventDefault(); // Prevent the default behavior (e.g., scrolling)
   e.stopPropagation(); // Prevent event bubbling
 });
 
