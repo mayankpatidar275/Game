@@ -63,6 +63,7 @@ playButton.addEventListener("click", () => {
       gameOverMusic.pause();
       playButton.textContent = "Sound 🔈";
     }
+    playButton.blur();
 });
 
 document.addEventListener("keydown", function (e) {
