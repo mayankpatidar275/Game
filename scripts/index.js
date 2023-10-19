@@ -86,6 +86,8 @@ document.addEventListener("keydown", function (e) {
     
     if (obstacleAnimationState === "paused") {
       startAnimation();
+      trackMusic.play();
+      playButton.textContent = "Sound 🔊";
       if(gameStarted) startRestartButton.style.visibility = "hidden";
     } else if (obstacleAnimationState === "running") {
       pauseAnimation();
